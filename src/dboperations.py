@@ -31,7 +31,7 @@ def insertvalues(conn, table, values):
     print("Values Succesfully Insert To " + table)
  
 # execute select statement  
-def executestatement(conn, table, column):
+def executeSelectstatement(conn, table, column):
 
     query1 = f"select {column} from {table};"
     try: 
@@ -42,6 +42,18 @@ def executestatement(conn, table, column):
     
     return result
 
+ # execute statement  
+def executestatement(conn, str): 
+    global result
+    query1 = f"{str};"
+    try: 
+        for row in conn.execute(query1):
+            result = dict(row.items())
+    except Exception as error:
+        print("Error " + error)
+    
+    return result   
+
 # database connection close 
 def closeconnection(conn):
 
@@ -50,4 +62,3 @@ def closeconnection(conn):
     except Exception as error:
         print("Error: " + error)
     print("DB Connection Closed")
-
