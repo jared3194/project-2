@@ -27,7 +27,7 @@ create table flights (
 	iata varchar(100) not null,
 	icao varchar(100) not null,
 	airport_id int not null,
-	airline_id int not null,
+	airline_id int,
 	terminal varchar(100),
 	gate varchar(100),
 	baggage varchar(100),
@@ -36,6 +36,7 @@ create table flights (
 	estimated date,
 	actual date, 
 	estimated_runway date,
-	actual_runway date,
-	constraint flights_fk1 foreign key(airport_id) references airports(airport_id),	 
-	constraint flights_fk2 foreign key(airline_id) references airlines(airline_id) );	 	
+	actual_runway date
+);	 	 
+ 
+
