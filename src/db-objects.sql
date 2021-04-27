@@ -36,7 +36,7 @@ create table flights (
 	estimated date,
 	actual date, 
 	estimated_runway date,
-	actual_runway date,
-	constraint flights_fk1 foreign key(airport_id) references airports(airport_id)
-	--constraint flights_fk2 foreign key(airline_id) references airlines(airline_id)
+	actual_runway date
 );	 	 
+ 
+
