@@ -44,23 +44,23 @@ function loadChart() {
 
     // ============================================================================
     // ===========Functions =======================================================
-    var chosenXAxis = "Hartsford Jackson Int'l Airport (ATL)";
-    var chosenYAxis = "Departure - Landing in ATL";
+    var chosenXAxis = "dep_airport";
+    var chosenYAxis = "dep_airport_no";
 
     // ==========xScale and yScale
-    function xScale(StateData, chosenXAxis) {
+    function xScale(aviationData, chosenXAxis) {
         var xLinearScale = d3.scaleLinear()
-            .domain([d3.min(StateData, d => d[chosenXAxis]),
-                d3.max(StateData, d => d[chosenXAxis]) 
+            .domain([d3.min(aviationData, d => d[chosenXAxis]),
+                d3.max(aviationData, d => d[chosenXAxis]) 
             ])
             .range([0, width]); 
 
         return xLinearScale;
     }
 
-    function yScale(StateData, chosenYAxis) {
+    function yScale(aviationData, chosenYAxis) {
         var yLinearScale = d3.scaleLinear()
-            .domain([0, d3.max(StateData, d => d[chosenYAxis])
+            .domain([0, d3.max(aviationData, d => d[chosenYAxis])
             ])
             .range([height, 0]);
 
@@ -124,36 +124,30 @@ function loadChart() {
         return circleGroup;
     }
 
-    // =================Update Tooltips - labels and tip
+   // =================Update Tooltips - labels and tip
     function updateToolTip(circleGroup, chosenXAxis, chosenYAxis) {
         var xlabel = "";
-        if (chosenXAxis === "poverty") {
-            xlabel = "Poverty(%): ";
-        }
-        else if (chosenXAxis === "age") {
-            xlabel = "Age (median): ";
-        }
-        else {
-            xlabel = "Income(median): $ ";   
-        }
+        if (d.selection === "ATL") then
+            (chosenXAxis === "dep_airport")
+                xlabel = "Atlanta to ";
+        // else (chosenXAxis === "dep_airport"); 
+        //         xlabel = "Los Angeles to ";
 
         var ylabel = "";
-        if(chosenYAxis === "obesity") {
-            ylabel = "Obesity(%): ";
+        if(chosenYAxis === "dep_airport") {
+            ylabel = "Number Depart to: ";
         }
-        else if (chosenYAxis === "healthcareLow") {
-            ylabel = "Healthcare(%): ";
+        else if (chosenYAxis === "arr_airport") {
+            ylabel = "Number Arrival from: ";
         }
-        else {
-            ylabel = "Smokes(%): "
-        }
+    
 
         // ==============Update tool function
         var toolTip = d3.tip()
             .attr("class", "tooltip")
             .offset([80, -60])
             .html(function(d) {
-                return(`${d.state}<br>${xlabel}${d[chosenXAxis]}<br>${ylabel}${d[chosenYAxis]}`)
+                return(`${d.airport}<br>${xlabel}${d[chosenXAxis]}<br>${ylabel}${d[chosenYAxis]}`)
             });
 
         circleGroup.call(toolTip);
@@ -170,24 +164,20 @@ function loadChart() {
 
     // =================================================================================
     // ===============Retrieving data & Parse data======================================
-    d3.csv("./assets/data/data.csv").then(function(StateData, err) {
+    d3.csv("./assets/data/aviationData.csv").then(function(aviationData, err) {
         if (err) throw err;
 
-        StateData.forEach(function(data) {
-            data.poverty = +data.poverty;
-            data.age = +data.age;
-            data.income = +data.income;
-            data.obesity = +data.obesity;
-            data.smokes = +data.smokes;
-            data.healthcareLow = +data.healthcareLow;
-        });
+        // dep_airport_no = 0;
+        // aviationData.forEach(function(data.dep_airport) {
+        //     dep_airport_no = data.dep_airport + dep_airport_no;
+        // });
 
-        // ******Testing StateData loaded******
-        console.log("StateData: ", StateData);
+        // ******Testing Aviation Data loaded******
+        console.log("aviationData: ", aviationData);
 
         // Repeat Linear functions from above retrieval
-        var xLinearScale = xScale(StateData, chosenXAxis);
-        var yLinearScale = yScale(StateData, chosenYAxis);
+        var xLinearScale = xScale(aviationData, chosenXAxis);
+        var yLinearScale = yScale(aviationData, chosenYAxis);
        
 
          // ==========Create Axis
@@ -205,7 +195,7 @@ function loadChart() {
         // ===========Circles created on chart
 
         var circleGroup = chartGroup.selectAll("g circle")
-            .data(StateData)
+            .data(aviationData)
             .enter()
             .append("g");
         
@@ -218,64 +208,49 @@ function loadChart() {
                 
         // =============Add labels circles (scatterplot)
         var circleText = circleGroup.append("text")
-            .text(d => d.abbr)
+            .text(d => d.dep_airport_iata)
             .attr("dx", d => xLinearScale(d[chosenXAxis]))
             .attr("dy", d=> yLinearScale(d[chosenYAxis]))
             .attr("font-size", "11px")
             .attr("fill", "black")
             .attr("text-anchor", "middle");
 
-        // Creat group for three x-axis labels
+        // Creat group for two x-axis labels
         var labelsGroup = chartGroup.append("g")
             .attr("transform", `translate(${width / 2}, ${height + 20})`);
 
-        var povertylabel = labelsGroup.append("text")
+        var airportlabel1 = labelsGroup.append("text")
             .attr("x", 0)
             .attr("y", 20)
-            .attr("value", "poverty")
+            .attr("value", "ATL")
             .classed("active", true)
-            .text("Poverty (%)");
+            .text("Atlanta International");
         
-        var agelabel = labelsGroup.append("text")
+        var airportlabel2 = labelsGroup.append("text")
             .attr("x",0)
             .attr("y", 40)
-            .attr("value", "age")
+            .attr("value", "LAX")
             .classed("inactive", true)
-            .text(" Age (median)");
-        
-        var incomelabel = labelsGroup.append("text")
-            .attr("x",0)
-            .attr("y", 60)
-            .attr("value", "income")
-            .classed("inactive", true)
-            .text(" Household Income (median)");
+            .text(" Los Angeles International");
 
-        // Create group for three y-axis labels
+        // Create group for two y-axis labels
         var ylabelsGroup = chartGroup.append("g");
 
-        var obesitylabel = ylabelsGroup.append("text")
+        var arrivallabel = ylabelsGroup.append("text")
             .attr("transform", "rotate(-90)")
             .attr("y", -40)
             .attr("x", 0 - (height / 2))
-            .attr("value", "obesity")
+            .attr("value", "arr_airport")
             .classed("active", true)
-            .text("Obesity (%)");
+            .text("Number Arrival from");
         
-        var healthcarelabel = ylabelsGroup.append("text")
+        var departurelabel = ylabelsGroup.append("text")
             .attr("transform", "rotate(-90)")
             .attr("y", -60)
             .attr("x", 0 - (height / 2))
-            .attr("value", "healthcareLow")
+            .attr("value", "dep_airport")
             .classed("inactive", true)
-            .text("Lacks Healthcare (%)");
-        
-        var smokeslabel = ylabelsGroup.append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", -80)
-            .attr("x", 0 - (height / 2))
-            .attr("value", "smokes")
-            .classed("inactive", true)
-            .text("Smokes (%)");
+            .text("Number Depart To");     
 
         var circleGroup = updateToolTip(circleGroup, chosenXAxis, chosenYAxis);
 
@@ -287,45 +262,28 @@ function loadChart() {
             chosenXAxis = value;
             }
 
-            xLinearScale = xScale(StateData, chosenXAxis);
+            xLinearScale = xScale(aviationData, chosenXAxis);
             xAxis = renderXAxes(xLinearScale, xAxis);
             placeCircle = renderXCircles(placeCircle, xLinearScale, chosenXAxis);
             circleText = renderXText(circleText, xLinearScale, chosenXAxis);
             circleGroup = updateToolTip(circleGroup, chosenXAxis, chosenYAxis);
 
             //Changes classes to change bold text
-            if (chosenXAxis === "poverty") {
-                povertylabel
+            if (chosenXAxis === "ATL") {
+                airportlabel1
                     .classed("active", true)
                     .classed("inactive", false);
-                agelabel
-                    .classed("active", false)
-                    .classed("inactive", true);
-                incomelabel
+                airportlabel2
                     .classed("active", false)
                     .classed("inactive", true);
                 }
-            else if (chosenXAxis === "income") {
-                povertylabel
+            else  {
+                airportlabel1
                     .classed("active", false)
                     .classed("inactive", true);
-                agelabel
+                airportlabel2
                     .classed("active", false)
                     .classed("inactive", true);
-                incomelabel
-                    .classed("active", true)
-                    .classed("inactive", false); 
-                }
-            else {
-                povertylabel
-                    .classed("active", false)
-                    .classed("inactive", true);
-                agelabel
-                    .classed("active", true)
-                    .classed("inactive", false);
-                incomelabel
-                    .classed("active", false)
-                    .classed("inactive", true); 
                 }
         })
         // y axis labels event listener
@@ -336,48 +294,31 @@ function loadChart() {
                     chosenYAxis = value;
             }
 
-            yLinearScale = yScale(StateData, chosenYAxis);
+            yLinearScale = yScale(aviationData, chosenYAxis);
             yAxis = renderYAxes(yLinearScale, yAxis);
             placeCircle = renderYCircles(placeCircle, yLinearScale, chosenYAxis);
             circleText = renderYText(circleText, yLinearScale, chosenYAxis);
             circleGroup = updateToolTip(circleGroup, chosenXAxis, chosenYAxis);
 
              //Changes classes to change bold text
-             if (chosenYAxis === "obesity") {
-                obesitylabel
+             if (chosenYAxis === "Dep_airport") {
+                departurelabel
                     .classed("active", true)
                     .classed("inactive", false);
-                healthcarelabel
+                arrivallabel
                     .classed("active", false)
                     .classed("inactive", true);
-                smokeslabel
+                 }
+            else  {
+                departurelabel
                     .classed("active", false)
                     .classed("inactive", true);
-                }
-            else if (chosenYAxis === "smokes") {
-                obesitylabel
-                    .classed("active", false)
-                    .classed("inactive", true);
-                healthcarelabel
-                    .classed("active", false)
-                    .classed("inactive", true);
-                smokeslabel
-                    .classed("active", true)
-                    .classed("inactive", false); 
-                }
-            else {
-                obesitylabel
-                    .classed("active", false)
-                    .classed("inactive", true);
-                healthcarelabel
+                arrivallabel
                     .classed("active", true)
                     .classed("inactive", false);
-                smokeslabel
-                    .classed("active", false)
-                    .classed("inactive", true); 
                 }
-            })
+            })    
         }).catch(function(error) {
             console.log(error);
     }); 
-}
+};   
