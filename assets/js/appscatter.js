@@ -44,8 +44,8 @@ function loadChart() {
 
     // ============================================================================
     // ===========Functions =======================================================
-    var chosenXAxis = "dep_airport";
-    var chosenYAxis = "dep_airport_no";
+    var chosenXAxis = "arr_airport";
+    var chosenYAxis = "count";
 
     // ==========xScale and yScale
     function xScale(aviationData, chosenXAxis) {
@@ -125,22 +125,22 @@ function loadChart() {
     }
 
    // =================Update Tooltips - labels and tip
-    function updateToolTip(circleGroup, chosenXAxis, chosenYAxis) {
-        var xlabel = "";
-        if (d.selection === "ATL") then
-            (chosenXAxis === "dep_airport")
-                xlabel = "Atlanta to ";
-        // else (chosenXAxis === "dep_airport"); 
-        //         xlabel = "Los Angeles to ";
+   function updateToolTip(circleGroup, chosenXAxis, chosenYAxis) {
+    var xlabel = "";
+    if (chosenXAxis === "arr_airport") {
+        xlabel = "Arrival Airport: ";
+    }
+    else if (chosenXAxis === "dep_airport") {
+        xlabel = "Departure Airport: ";
+    }
 
-        var ylabel = "";
-        if(chosenYAxis === "dep_airport") {
-            ylabel = "Number Depart to: ";
-        }
-        else if (chosenYAxis === "arr_airport") {
-            ylabel = "Number Arrival from: ";
-        }
-    
+    var ylabel = "";
+    if(chosenYAxis === "count") {
+        ylabel = "Depart Airport Count: ";
+    }
+    else if (chosenYAxis === "count") {
+        ylabel = "Arrive Airport Count: ";
+    }    
 
         // ==============Update tool function
         var toolTip = d3.tip()
@@ -164,14 +164,12 @@ function loadChart() {
 
     // =================================================================================
     // ===============Retrieving data & Parse data======================================
-    d3.csv("./assets/data/aviationData.csv").then(function(aviationData, err) {
+    d3.csv("./assets/data/depart_count.csv").then(function(aviationData, err) {
         if (err) throw err;
 
-        // dep_airport_no = 0;
-        // aviationData.forEach(function(data.dep_airport) {
-        //     dep_airport_no = data.dep_airport + dep_airport_no;
-        // });
-
+        aviationData.forEach(function(data) {
+            data.count = +data.count;
+        });
         // ******Testing Aviation Data loaded******
         console.log("aviationData: ", aviationData);
 
@@ -224,14 +222,14 @@ function loadChart() {
             .attr("y", 20)
             .attr("value", "ATL")
             .classed("active", true)
-            .text("Atlanta International");
+            .text("Atlanta International Airport");
         
         var airportlabel2 = labelsGroup.append("text")
             .attr("x",0)
             .attr("y", 40)
             .attr("value", "LAX")
             .classed("inactive", true)
-            .text(" Los Angeles International");
+            .text(" Los Angeles International Airport");
 
         // Create group for two y-axis labels
         var ylabelsGroup = chartGroup.append("g");
