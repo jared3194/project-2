@@ -42,20 +42,18 @@ function loadChart() {
     var chartGroup = svg.append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    // ============================================================================
-    // ===========Functions =======================================================
-    var chosenXAxis = "arr_airport";
-    var chosenYAxis = "count";
+ 
+    var chosenXAxis = 'selection1';
+    var chosenYAxis = "dep_airport";
 
     // ==========xScale and yScale
-    function xScale(aviationData, chosenXAxis) {
-        var xLinearScale = d3.scaleLinear()
-            .domain([d3.min(aviationData, d => d[chosenXAxis]),
-                d3.max(aviationData, d => d[chosenXAxis]) 
-            ])
-            .range([0, width]); 
 
-        return xLinearScale;
+    function xScale(aviationData, chosenXAxis) { 
+        var xLinearScale = d3.scaleBand()
+            .rangeRound([0, width]).padding(1)
+            .domain(0, aviationData.map[chosenXAxis]);
+
+            return xLinearScale;
     }
 
     function yScale(aviationData, chosenYAxis) {
@@ -170,6 +168,7 @@ function loadChart() {
         aviationData.forEach(function(data) {
             data.count = +data.count;
         });
+
         // ******Testing Aviation Data loaded******
         console.log("aviationData: ", aviationData);
 
@@ -240,7 +239,7 @@ function loadChart() {
             .attr("x", 0 - (height / 2))
             .attr("value", "arr_airport")
             .classed("active", true)
-            .text("Number Arrival from");
+            .text("Arrival Airport");
         
         var departurelabel = ylabelsGroup.append("text")
             .attr("transform", "rotate(-90)")
@@ -248,7 +247,7 @@ function loadChart() {
             .attr("x", 0 - (height / 2))
             .attr("value", "dep_airport")
             .classed("inactive", true)
-            .text("Number Depart To");     
+            .text("Departure Airport");     
 
         var circleGroup = updateToolTip(circleGroup, chosenXAxis, chosenYAxis);
 
