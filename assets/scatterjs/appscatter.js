@@ -34,7 +34,7 @@ function loadChart() {
     console.log("Width: ", width);
 
     //============Create SVG container
-    var svg = d3.select("#scatter").append("svg")
+    var svg = d3.select("scatter").append("svg")
         .attr("width", svgWidth)
         .attr("height", svgHeight + 30);
 
@@ -42,19 +42,18 @@ function loadChart() {
     var chartGroup = svg.append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
- 
-    var chosenXAxis = 'selection1';
-    var chosenYAxis = "dep_airport";
+    var chosenXAxis = 'dep_airport';
+    var chosenYAxis = "count";   
 
     // ==========xScale and yScale
-
-    function xScale(aviationData, chosenXAxis) { 
-        var xLinearScale = d3.scaleBand()
-            .rangeRound([0, width]).padding(1)
-            .domain(0, aviationData.map[chosenXAxis]);
-
-            return xLinearScale;
-    }
+    function xScale(aviationData, chosenXAxis) {
+        var xLinearScale = d3.scaleLinear()
+        .range([0, width])
+        .domain(d3.extent(aviationData, d => d[chosenXAxis])
+        )  
+             
+        return xLinearScale;      
+    }    
 
     function yScale(aviationData, chosenYAxis) {
         var yLinearScale = d3.scaleLinear()
@@ -183,8 +182,11 @@ function loadChart() {
 
         // =============Append x and y plus the circles (scatterplot)
         var xAxis = chartGroup.append("g")
+            .attr("class", "axis axis --x")
             .attr("transform", `translate(0, ${height})`)
-            .call(bottomAxis);
+            .call(bottomAxis)
+                // .ticks(ticksize)
+                // .tickFormat(function(d,i) => tickLabels[i]);
 
         var yAxis = chartGroup.append("g")
             .call(leftAxis);
