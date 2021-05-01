@@ -18,8 +18,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SECRET_KEY'] ='C\xcd\x15t\xaf-\xa3\x80`\xf1!u\xbaBE\x03K\x9d\xdf\xc1\x90H\xf2\xf2/'
 
 db = SQLAlchemy(app)
-
-
     
 Base.metadata.create_all(engine)
 

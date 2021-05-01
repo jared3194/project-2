@@ -34,7 +34,7 @@ function loadChart() {
     console.log("Width: ", width);
 
     //============Create SVG container
-    var svg = d3.select("scatter").append("svg")
+    var svg = d3.select("#scatter").append("svg")
         .attr("width", svgWidth)
         .attr("height", svgHeight + 30);
 
@@ -42,8 +42,8 @@ function loadChart() {
     var chartGroup = svg.append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    var chosenXAxis = 'dep_airport';
-    var chosenYAxis = "count";   
+    var chosenXAxis = 'dep_airport_atl';
+    var chosenYAxis = "depart_count_atl";   
 
     // ==========xScale and yScale
     function xScale(aviationData, chosenXAxis) {
@@ -124,19 +124,19 @@ function loadChart() {
    // =================Update Tooltips - labels and tip
    function updateToolTip(circleGroup, chosenXAxis, chosenYAxis) {
     var xlabel = "";
-    if (chosenXAxis === "arr_airport") {
-        xlabel = "Arrival Airport: ";
+    if (chosenXAxis === "departure_airport_atl") {
+        xlabel = "Departure Airport: ";
     }
-    else if (chosenXAxis === "dep_airport") {
+    else if (chosenXAxis === "departure_airport_lax") {
         xlabel = "Departure Airport: ";
     }
 
     var ylabel = "";
-    if(chosenYAxis === "count") {
+    if(chosenYAxis === "departure_count_atl") {
         ylabel = "Depart Airport Count: ";
     }
-    else if (chosenYAxis === "count") {
-        ylabel = "Arrive Airport Count: ";
+    else if (chosenYAxis === "departure_count_lax") {
+        ylabel = "Depart Airport Count: ";
     }    
 
         // ==============Update tool function
@@ -161,11 +161,11 @@ function loadChart() {
 
     // =================================================================================
     // ===============Retrieving data & Parse data======================================
-    d3.csv("./assets/data/depart_count.csv").then(function(aviationData, err) {
+    d3.csv("./assets/data/scatter/arratl.csv").then(function(aviationData, err) {
         if (err) throw err;
 
         aviationData.forEach(function(data) {
-            data.count = +data.count;
+            data.departure_count_atl = +data.departure_count_atl
         });
 
         // ******Testing Aviation Data loaded******
@@ -221,14 +221,14 @@ function loadChart() {
         var airportlabel1 = labelsGroup.append("text")
             .attr("x", 0)
             .attr("y", 20)
-            .attr("value", "ATL")
+            .attr("value", "arrival_airport_atl")
             .classed("active", true)
             .text("Atlanta International Airport");
         
         var airportlabel2 = labelsGroup.append("text")
             .attr("x",0)
             .attr("y", 40)
-            .attr("value", "LAX")
+            .attr("value", "arrival_airport_lax")
             .classed("inactive", true)
             .text(" Los Angeles International Airport");
 
@@ -239,17 +239,17 @@ function loadChart() {
             .attr("transform", "rotate(-90)")
             .attr("y", -40)
             .attr("x", 0 - (height / 2))
-            .attr("value", "arr_airport")
+            .attr("value", "departure_count_atl")
             .classed("active", true)
-            .text("Arrival Airport");
+            .text("Departure Airport");
         
         var departurelabel = ylabelsGroup.append("text")
             .attr("transform", "rotate(-90)")
             .attr("y", -60)
             .attr("x", 0 - (height / 2))
-            .attr("value", "dep_airport")
+            .attr("value", "xxx")
             .classed("inactive", true)
-            .text("Departure Airport");     
+            .text("sss");     
 
         var circleGroup = updateToolTip(circleGroup, chosenXAxis, chosenYAxis);
 
@@ -268,7 +268,7 @@ function loadChart() {
             circleGroup = updateToolTip(circleGroup, chosenXAxis, chosenYAxis);
 
             //Changes classes to change bold text
-            if (chosenXAxis === "ATL") {
+            if (chosenXAxis === "arrival_airport_atl") {
                 airportlabel1
                     .classed("active", true)
                     .classed("inactive", false);
@@ -300,7 +300,7 @@ function loadChart() {
             circleGroup = updateToolTip(circleGroup, chosenXAxis, chosenYAxis);
 
              //Changes classes to change bold text
-             if (chosenYAxis === "Dep_airport") {
+             if (chosenYAxis === "Departure_count_atl") {
                 departurelabel
                     .classed("active", true)
                     .classed("inactive", false);
