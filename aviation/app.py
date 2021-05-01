@@ -13,13 +13,10 @@ from config import DATABASE_URL
 #################################################
 # Database Setup
 #################################################
-
-
 engine = create_engine(DATABASE_URL)
 
 # reflect an existing database into a new model
 Base = automap_base()
-
 # reflect the tables
 Base.prepare(engine, reflect=True)
 
@@ -33,7 +30,6 @@ session = Session(bind=engine)
 
 for row in pd.read_sql_query('SELECT * FROM flights', engine.connect()):
     print(row)
-
 #################################################
 # Flask Routes
 #################################################
@@ -43,14 +39,13 @@ for row in pd.read_sql_query('SELECT * FROM flights', engine.connect()):
 app = Flask(__name__)
 
 # for rows in pd.read_sql_query('SELECT * FROM flight_details', engine.connect()):
-#         print rows
-
+#         return rows
 @app.route("/")
 def welcome():
     return render_template("base.html")
 
-# #   * Convert the query results to a dictionary using `date` as the key and `prcp` as the value.
-# #   * Return the JSON representation of your dictionary.
+# # #   * Convert the query results to a dictionary using `date` as the key and `prcp` as the value.
+# # #   * Return the JSON representation of your dictionary.
 
 
 @app.route("/api/aviation")

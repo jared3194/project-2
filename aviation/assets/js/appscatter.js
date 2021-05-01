@@ -161,7 +161,7 @@ function loadChart() {
 
     // =================================================================================
     // ===============Retrieving data & Parse data======================================
-    d3.json("/api/aviation").then(function(aviationData, err) {
+    d3.csv("assets/data/arrivals").then(function(aviationData, err) {
         if (err) throw err;
 
         aviationData.forEach(function(data) {
