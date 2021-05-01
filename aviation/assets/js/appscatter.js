@@ -42,8 +42,8 @@ function loadChart() {
     var chartGroup = svg.append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    var chosenXAxis = 'dep_airport_atl';
-    var chosenYAxis = "depart_count_atl";   
+    var chosenXAxis = 'departure_airport_atl';
+    var chosenYAxis = "departure_count_atl";   
 
     // ==========xScale and yScale
     function xScale(aviationData, chosenXAxis) {
@@ -161,11 +161,12 @@ function loadChart() {
 
     // =================================================================================
     // ===============Retrieving data & Parse data======================================
-    d3.csv("./assets/data/scatter/arratl.csv").then(function(aviationData, err) {
+    d3.json("/api/aviation").then(function(aviationData, err) {
         if (err) throw err;
 
         aviationData.forEach(function(data) {
             data.departure_count_atl = +data.departure_count_atl
+            data.departure_count_lax = +data.departure_count_lax
         });
 
         // ******Testing Aviation Data loaded******
@@ -206,13 +207,13 @@ function loadChart() {
             .attr("opacity", ".5")
                 
         // =============Add labels circles (scatterplot)
-        var circleText = circleGroup.append("text")
-            .text(d => d.dep_airport_iata)
-            .attr("dx", d => xLinearScale(d[chosenXAxis]))
-            .attr("dy", d=> yLinearScale(d[chosenYAxis]))
-            .attr("font-size", "11px")
-            .attr("fill", "black")
-            .attr("text-anchor", "middle");
+        // var circleText = circleGroup.append("text")
+        //     .text(d => d.departur)
+        //     .attr("dx", d => xLinearScale(d[chosenXAxis]))
+        //     .attr("dy", d=> yLinearScale(d[chosenYAxis]))
+        //     .attr("font-size", "11px")
+        //     .attr("fill", "black")
+        //     .attr("text-anchor", "middle");
 
         // Creat group for two x-axis labels
         var labelsGroup = chartGroup.append("g")
@@ -281,8 +282,8 @@ function loadChart() {
                     .classed("active", false)
                     .classed("inactive", true);
                 airportlabel2
-                    .classed("active", false)
-                    .classed("inactive", true);
+                    .classed("active", true)
+                    .classed("inactive", false);
                 }
         })
         // y axis labels event listener

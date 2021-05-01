@@ -95,14 +95,14 @@ SELECT * FROM arratlanta;
    and arf.flight_type = 'DEPARTURE'
    and dpf.flight_number = arf.flight_number);
    
-    SELECT * FROM scatter2; 
+    SELECT * FROM arrlaxsum; 
 	
 ALTER  TABLE scatter2
    DROP COLUMN arrival_estimated_runway;
    
-CREATE TABLE depatl AS
+CREATE TABLE arrlax AS
    	 SELECT * FROM scatter 
-	 WHERE departure_airport_id = '19';
+	 WHERE departure_airport_id = '194';
 	 
     SELECT * FROM depatl; 
    
@@ -115,24 +115,29 @@ FROM
 GROUP BY
 	departure_airport
 	
-alter table arrlaxsum
-rename column count to departure_count;
 
 alter table arrlaxsum
 add column arrival_airport varchar;
 
-update arrlaxsum
-set arrival_airport = arrlax.arrival_airport
-from arrlax
-where arrlax.departure_airport = arrlaxsum.departure_airport;
+select * from arrlaxsum;
 
-select * from arrivals;
-
-alter table arratlsum
+alter table arrlaxsum
 rename column departure_count to departure_count_lax;
 
 create table arrivals as
-select * from arratlsum 
-union 
-select * from arrlaxsum;
+  (select * from arratlsum);
+  
+insert into arrivals (departure_atl_airport, departure_count_atl, arrival_airport_atl) select * from arratlsum;
+insert into arrivals (departure_lax_airport, departure_count_lax, arrival_airport_lax) select * from arrlaxsum;
+
+
+alter table arratlsum
+rename column departure_count_lax to departure_count_atl;
+
+
+insert into arrivals 
+select departure_lax_airport, departure_count_lax, arrival_airport_lax from arrlaxsum;
+  
+
+select * from arrivals
   

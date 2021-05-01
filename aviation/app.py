@@ -1,33 +1,64 @@
-from app import create_app
-from sqlalchemy import engine
-from sqlalchemy import create_engine, func, MetaData, Table
-from flask import Flask, jsonify
-from sqlalchemy.orm import sessionmaker, relationship
-from sqlalchemy.ext.declarative import declarative_base
+import numpy as np
+from flask_sqlalchemy import SQLAlchemy
+import sqlalchemy
+import datetime as dt
+import pandas as pd
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine, func
+from flask import Flask, jsonify, render_template, redirect
+from config import DATABASE_URL
 
-app = create_app()
 
-if __name__== '__main__':
-    app.run(debug=True)
+#################################################
+# Database Setup
+#################################################
 
-engine = create_engine(SQLALCHEMY_DATABASE_URI)
-Base = declarative_base()
 
+engine = create_engine(DATABASE_URL)
+
+# reflect an existing database into a new model
+Base = automap_base()
+
+# reflect the tables
+Base.prepare(engine, reflect=True)
+
+# Save reference to the table
+flights = Base.classes.flights
+airports = Base.classes.airports
+
+print(Base.classes.keys())
+
+session = Session(bind=engine)
+
+for row in pd.read_sql_query('SELECT * FROM flights', engine.connect()):
+    print(row)
+
+#################################################
+# Flask Routes
+#################################################
+# * `/`
+#   * Home page.
+#   * List all routes that are available.
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
-app.config['SECRET_KEY'] ='C\xcd\x15t\xaf-\xa3\x80`\xf1!u\xbaBE\x03K\x9d\xdf\xc1\x90H\xf2\xf2/'
 
-db = SQLAlchemy(app)
-    
-Base.metadata.create_all(engine)
+# for rows in pd.read_sql_query('SELECT * FROM flight_details', engine.connect()):
+#         print rows
 
-def create_session():
-    session = sessionmaker(bind=engine)
-    return session()
+@app.route("/")
+def welcome():
+    return render_template("base.html")
+
+# #   * Convert the query results to a dictionary using `date` as the key and `prcp` as the value.
+# #   * Return the JSON representation of your dictionary.
 
 
-@app.route('/')
-def Base():
-    return ("base.html")
+@app.route("/api/aviation")
+def aviation():
+    flight_details = pd.read_sql_query('SELECT * FROM flight_details', engine.connect())
+    print(flight_details)
 
-app.run(debug=True, host="127.0.0.1", port=5000)
+
+    # session.close()
+if __name__ == '__main__':
+    app.run(debug=True)
