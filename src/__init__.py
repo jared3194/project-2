@@ -23,12 +23,13 @@ Base.prepare(engine, reflect=True)
 # Save reference to the table
 flights = Base.classes.flights
 airports = Base.classes.airports
+arrivals = Base.classes.arrival
 
 print(Base.classes.keys())
 
 session = Session(bind=engine)
 
-for row in pd.read_sql_query('SELECT * FROM flights', engine.connect()):
+for row in pd.read_sql_query('SELECT * FROM arrivals', engine.connect()):
     print(row)
 #################################################
 # Flask Routes
@@ -48,10 +49,10 @@ def welcome():
 # # #   * Return the JSON representation of your dictionary.
 
 
-@app.route("/api/aviation")
+@app.route("/aviation")
 def aviation():
-    flight_details = pd.read_sql_query('SELECT * FROM flight_details', engine.connect())
-    print(flight_details)
+    results = pd.read_sql_query('SELECT * FROM arrival', engine.connect()).to_dict()
+    return results
 
 
     # session.close()

@@ -16,8 +16,8 @@ function handleResize() {
 
 function loadChart() {
     // ===========Set Height, Width and Margins
-    var svgHeight = 600;
-    var svgWidth = 960;
+    var svgHeight = 400;
+    var svgWidth = 760;
     var margin = {
         top: 20,
         right: 40,
@@ -36,7 +36,7 @@ function loadChart() {
     //============Create SVG container
     var svg = d3.select("#scatter").append("svg")
         .attr("width", svgWidth)
-        .attr("height", svgHeight + 30);
+        .attr("height", svgHeight);
 
     // ===========Append SVG group
     var chartGroup = svg.append("g")
@@ -47,9 +47,9 @@ function loadChart() {
 
     // ==========xScale and yScale
     function xScale(aviationData, chosenXAxis) {
-        var xLinearScale = d3.scaleLinear()
+        var xLinearScale = d3.scaleBand()
         .range([0, width])
-        .domain(d3.extent(aviationData, d => d[chosenXAxis])
+        .domain(d3.map(aviationData, d => d[chosenXAxis])
         )  
              
         return xLinearScale;      
@@ -161,7 +161,7 @@ function loadChart() {
 
     // =================================================================================
     // ===============Retrieving data & Parse data======================================
-    d3.csv("assets/data/arrivals").then(function(aviationData, err) {
+    d3.csv("").then(function(aviationData, err) {
         if (err) throw err;
 
         aviationData.forEach(function(data) {
