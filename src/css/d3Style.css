@@ -41,14 +41,14 @@
 
 .tooltip {
   position: absolute;
-  width: 140px;
-  height: 55px;
+  width: 180px;
+  height: 100px;
   padding: 6px;
   font: 11px sans-serif;
   text-align: center;
   color: black;
   background: lightsteelblue;
-  border: 10px;
+  border: 5px;
   border-color: darkslategrey;
   border-radius: 8px;
 }

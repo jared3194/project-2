@@ -16,18 +16,18 @@ function handleResize() {
 
 function loadChart() {
     // ===========Set Height, Width and Margins
-    var svgHeight = 400;
-    var svgWidth = 760;
+    var svgHeight = 438;
+    var svgWidth = 500;
     var margin = {
         top: 20,
         right: 40,
         bottom: 80,
-        left: 100
+        left: 35
     };
     
     // ===========Create chart area
     var height = svgHeight - margin.top - margin.bottom;
-    var width = svgWidth - margin.left - margin.right;
+    var width = svgWidth - margin.left;
 
     // ******Test that the settings are working******
     console.log("Height: ", height);
@@ -42,7 +42,7 @@ function loadChart() {
     var chartGroup = svg.append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    var chosenXAxis = 'departure_airport_atl';
+    var chosenXAxis = "departure_to_atl";
     var chosenYAxis = "departure_count_atl";   
 
     // ==========xScale and yScale
@@ -104,47 +104,47 @@ function loadChart() {
     }
 
     
-     // ==========Text  for circles   
-     function renderXText(circleGroup, newXScale, chosenXAxis) {
-        circleGroup.transition()
-        .duration(1000)
-        .attr("dx", d => newXScale(d[chosenXAxis]));
+    //  // ==========Text  for circles   
+    //  function renderXText(circleGroup, newXScale, chosenXAxis) {
+    //     circleGroup.transition()
+    //     .duration(1000)
+    //     .attr("dx", d => newXScale(d[chosenXAxis]));
     
-        return circleGroup;
-    }
+    //     return circleGroup;
+    // }
     
-    function renderYText(circleGroup, newYScale, chosenYAxis) {
-        circleGroup.transition()
-        .duration(1000)
-        .attr("dy", d => newYScale(d[chosenYAxis]));
+    // function renderYText(circleGroup, newYScale, chosenYAxis) {
+    //     circleGroup.transition()
+    //     .duration(1000)
+    //     .attr("dy", d => newYScale(d[chosenYAxis]));
     
-        return circleGroup;
-    }
+    //     return circleGroup;
+    // }
 
    // =================Update Tooltips - labels and tip
    function updateToolTip(circleGroup, chosenXAxis, chosenYAxis) {
     var xlabel = "";
-    if (chosenXAxis === "departure_airport_atl") {
-        xlabel = "Departure Airport: ";
+    if (chosenXAxis === "departure_to_atl") {
+        xlabel = "Departure Airport to ATL:  ";
     }
-    else if (chosenXAxis === "departure_airport_lax") {
-        xlabel = "Departure Airport: ";
+    else if (chosenXAxis === "departure_to_lax") {
+        xlabel = "Departure Airport to LAX:  ";
     }
 
     var ylabel = "";
     if(chosenYAxis === "departure_count_atl") {
-        ylabel = "Depart Airport Count: ";
+        ylabel = "Depart Airport Count:  ";
     }
     else if (chosenYAxis === "departure_count_lax") {
-        ylabel = "Depart Airport Count: ";
+        ylabel = "Depart Airport Count:  ";
     }    
 
         // ==============Update tool function
         var toolTip = d3.tip()
             .attr("class", "tooltip")
-            .offset([80, -60])
+            .offset([100, -60])
             .html(function(d) {
-                return(`${d.airport}<br>${xlabel}${d[chosenXAxis]}<br>${ylabel}${d[chosenYAxis]}`)
+                return(`${xlabel}<br>${d[chosenXAxis]}<hr>${ylabel}${d[chosenYAxis]}`)
             });
 
         circleGroup.call(toolTip);
@@ -161,7 +161,7 @@ function loadChart() {
 
     // =================================================================================
     // ===============Retrieving data & Parse data======================================
-    d3.csv("").then(function(aviationData, err) {
+    d3.csv("../data/arrivals.csv").then(function(aviationData, err) {
         if (err) throw err;
 
         aviationData.forEach(function(data) {
@@ -207,13 +207,13 @@ function loadChart() {
             .attr("opacity", ".5")
                 
         // =============Add labels circles (scatterplot)
-        // var circleText = circleGroup.append("text")
-        //     .text(d => d.departur)
-        //     .attr("dx", d => xLinearScale(d[chosenXAxis]))
-        //     .attr("dy", d=> yLinearScale(d[chosenYAxis]))
-        //     .attr("font-size", "11px")
-        //     .attr("fill", "black")
-        //     .attr("text-anchor", "middle");
+        var circleText = circleGroup.append("text")
+            .text(d => d.data)
+            .attr("dx", d => xLinearScale(d[chosenXAxis]))
+            .attr("dy", d=> yLinearScale(d[chosenYAxis]))
+            .attr("font-size", "11px")
+            .attr("fill", "black")
+            .attr("text-anchor", "middle");
 
         // Creat group for two x-axis labels
         var labelsGroup = chartGroup.append("g")
@@ -242,15 +242,15 @@ function loadChart() {
             .attr("x", 0 - (height / 2))
             .attr("value", "departure_count_atl")
             .classed("active", true)
-            .text("Departure Airport");
+            .text("Departure Airport Count");
         
-        var departurelabel = ylabelsGroup.append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", -60)
-            .attr("x", 0 - (height / 2))
-            .attr("value", "xxx")
-            .classed("inactive", true)
-            .text("sss");     
+        // var departurelabel = ylabelsGroup.append("text")
+        //     .attr("transform", "rotate(-90)")
+        //     .attr("y", -60)
+        //     .attr("x", 0 - (height / 2))
+        //     .attr("value", "xxx")
+        //     .classed("inactive", true)
+        //     .text("sss");     
 
         var circleGroup = updateToolTip(circleGroup, chosenXAxis, chosenYAxis);
 
@@ -269,7 +269,7 @@ function loadChart() {
             circleGroup = updateToolTip(circleGroup, chosenXAxis, chosenYAxis);
 
             //Changes classes to change bold text
-            if (chosenXAxis === "arrival_airport_atl") {
+            if (chosenXAxis === "departure_to_atl") {
                 airportlabel1
                     .classed("active", true)
                     .classed("inactive", false);
@@ -279,11 +279,11 @@ function loadChart() {
                 }
             else  {
                 airportlabel1
-                    .classed("active", false)
-                    .classed("inactive", true);
-                airportlabel2
                     .classed("active", true)
                     .classed("inactive", false);
+                airportlabel2
+                    .classed("active", false)
+                    .classed("inactive", true);
                 }
         })
         // y axis labels event listener
