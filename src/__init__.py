@@ -7,7 +7,10 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 from flask import Flask, jsonify, render_template, redirect
-from config import DATABASE_URL
+#from config import conn_str#DATABASE_URL
+
+DATABASE_URL = f'postgresql://postgres:welcome1@localhost:5432/aviation'
+#conn = create_engine(f'postgresql://postgres:{sqlkey}@localhost:5432/aviation').connect()
 
 
 #################################################
