@@ -38,11 +38,15 @@ create table flights (
 	actual_runway date
 );	 	 
    
-create  view flight_details
-as
+create view flight_details 
+as 
 select split_part(dpf.flight_number, '_', 2)  as flight_number,
 	   dpf.iata flight_iata,
 	   dpf.icao flight_icao,
+	   dpf.airline_id flight_airline_id,
+	   dpal.airline flight_airline,
+	   dpal.iata airline_iata,
+	   dpal.icao airline_icao,
 	   dpf.airport_id departure_airport_id,
 	   dpa.airport departure_airport,
 	   dpa.iata departure_airport_iata,
@@ -74,12 +78,13 @@ select split_part(dpf.flight_number, '_', 2)  as flight_number,
   from flights dpf, 
   	   flights arf,
 	   airports dpa,
-	   airports ara
+	   airports ara,
+	   airlines dpal,
+	   airlines aral
  where dpf.airport_id = dpa.airport_id
    and dpf.flight_type = 'DEPARTURE'  
    and arf.airport_id = ara.airport_id
    and arf.flight_type = 'ARRIVAL'
-   and dpf.flight_number = arf.flight_number ;
- 
- 
-
+   and dpf.flight_number = arf.flight_number 
+   and dpal.airline_id  = cast(dpf.airline_id as integer)
+   and aral.airline_id = cast(arf.airline_id as integer);
