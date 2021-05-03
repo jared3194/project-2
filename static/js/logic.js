@@ -1,21 +1,4 @@
 var count = ('country_count.csv')
-// d3.csv(count).then(function (data) {
-//   console.log(data)
-//   for (var i = 0; i < data.length; i++) {
-//   Markers = []
-//   Markers.push(
-//     L.marker(data[i].Lat, data[i].Long), {icon: icons}.bindPopup("<h1>Airport: " + data.Arrive +
-//       "<h1>Number of Flights:  " + data.Count).addTo(myMap)
-  // createMap(arrival)
-
-// function createFeatures(countryData) {
-//   var arrival = (countryData, {
-//     onEachFeature: function (feature, layer) {
-//       layer.bindPopup("<h1>Airport: " + feature.Arrive +
-//         "<h1>Number of Flights:  " + feature.Count)
-//     }
-//   })
-
 
 function createMap(arrival) {
   var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
@@ -115,6 +98,7 @@ function createMap(arrival) {
 d3.csv(count).then(function (data) {
   console.log(data)
   for (var i = 0; i < data.length; i++) {
+    
   Markers = []
   Markers.push(
     L.marker(data[i].Lat, data[i].Long), {icon: icons}.bindPopup("<h1>Airport: " + data.Arrive +
