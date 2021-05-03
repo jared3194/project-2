@@ -1,14 +1,11 @@
 import numpy as np
 from flask_sqlalchemy import SQLAlchemy
-# from flask_migrate import Migrate, MigrateCommand
-# from app import app, db
 import sqlalchemy
 import datetime as dt
 import pandas as pd
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
-# from datapackage import Package
 from flask import Flask, jsonify, render_template, redirect
 from config import password, user
 
@@ -30,8 +27,11 @@ engine = create_engine(
 
 # print(Base.classes.keys())
 
-# session = Session(bind=engine)
-
+session = Session(bind=engine)
+# query1 = f"select {column} from {table};"
+# try:
+#     for row in pd.read_sql_query('SELECT * FROM flights', engine.connect()):
+#         result = dict(row.items())
 # for row in pd.read_sql_query('SELECT * FROM flights', engine.connect()):
 #     print(row)
 #################################################
@@ -40,24 +40,30 @@ engine = create_engine(
 # * `/`
 #   * Home page.
 #   * List all routes that are available.
-# app = Flask(__name__)
+app = Flask(__name__)
 
-for rows in pd.read_sql_query('SELECT * FROM flight_details', engine.connect()):
-        return rows
-# @app.route("/")
-# def welcome():
-#     return render_template("index.html")
-
-# # #   * Convert the query results to a dictionary using `date` as the key and `prcp` as the value.
-# # #   * Return the JSON representation of your dictionary.
+# for rows in pd.read_sql_query('SELECT * FROM flights', engine.connect()):
+#     print(rows)
 
 
-# @app.route("/api/aviation")
-# def aviation():
-#     flight_details = pd.read_sql_query('SELECT * FROM flight_details', engine.connect())
-#     return flight_details
+@app.route("/")
+def welcome():
+    # flight_details = pd.read_sql_query(
+    #     'SELECT * FROM flight_details', engine.connect())
+    # print(flight_details)
+    return render_template("index.html")
+
+# # # #   * Convert the query results to a dictionary using `date` as the key and `prcp` as the value.
+# # # #   * Return the JSON representation of your dictionary.
 
 
-#     # session.close()
-# if __name__ == '__main__':
-#     app.run(debug=True)
+@app.route("/aviation")
+def aviation():
+    results = pd.read_sql_query('SELECT * FROM international', engine.connect()).to_dict()
+    return results 
+    # print(results)
+
+
+# #     # session.close()
+if __name__ == '__main__':
+    app.run(debug=True)
