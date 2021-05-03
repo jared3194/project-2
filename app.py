@@ -35,6 +35,14 @@ app = Flask(__name__)
 def home():
     return render_template("base.html")
 
+@app.route('/chart1')
+def chart1():
+    return render_template("base1.html")   
+
+@app.route('/chart2')
+def chart2():
+    return render_template("base2.html")       
+
 # @app.route('/api/data')
 # def api():
 #     return flight_details

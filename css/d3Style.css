@@ -27,28 +27,16 @@
   display: block;
   margin: 0;
 }
-
-.axis text {
-  font: 10px sans-serif;
-}
-
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
 .tooltip {
   position: absolute;
-  width: 180px;
-  height: 100px;
+  width: 170px;
+  height: 130px;
   padding: 6px;
   font: 11px sans-serif;
   text-align: center;
   color: black;
   background: lightsteelblue;
-  border: 5px;
+  border: 10px;
   border-color: darkslategrey;
   border-radius: 8px;
 }
