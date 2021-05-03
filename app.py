@@ -37,11 +37,15 @@ def home():
 
 @app.route('/chart1')
 def chart1():
-    return render_template("base1.html")   
+    return render_template("base1.html")   #bar chart
 
 @app.route('/chart2')
 def chart2():
-    return render_template("base2.html")       
+    return render_template("base2.html")       #scatter
+
+@app.route('/chart3')
+def chart3():
+    return render_template("base3.html")       #scatter
 
 # @app.route('/api/data')
 # def api():
