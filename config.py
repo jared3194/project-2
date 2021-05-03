@@ -1,5 +1,0 @@
-db_user = 'postgres'
-db_pwd = 'Bly$$2'
-db_name = 'aviation'
-conn_str = 'postgres:Bly$22@localhost:5432/aviation'
-api_key= '6289ca69e9e258ac06e0faa6602570be'
