@@ -1,5 +1,7 @@
 // set the dimensions and margins of the graph
 
+console.log('test');
+
 var margin = {top: 30, right: 30, bottom: 255, left: 60},
 width = 1500 - margin.left - margin.right,
 height = 600 - margin.top - margin.bottom;
@@ -32,7 +34,8 @@ var yAxis = svg.append("g")
 function update(selectedVar) {
 
 // Parse the Data
-d3.csv("../lax_atl_count.csv", function(data) {
+// dataFileLink = "/../lax_atl_count.csv"
+d3.csv("/static/lax_atl_count.csv", function(data) {
 
 // Add Chart title
 

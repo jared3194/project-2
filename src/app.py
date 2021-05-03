@@ -13,7 +13,17 @@ from flask import Blueprint, render_template, Flask, jsonify
 
 
 #connect to database
-engine = create_engine("postgres://postgres:c1W9d9Cx$@localhost:5432/aviation")
+# engine = create_engine("postgres://postgres:welcome1$@localhost:5432/aviation")
+
+DATABASE_URL = f'postgresql://postgres:welcome1@localhost:5432/aviation'
+#conn = create_engine(f'postgresql://postgres:{sqlkey}@localhost:5432/aviation').connect()
+
+
+#################################################
+# Database Setup
+#################################################
+engine = create_engine(DATABASE_URL)
+
 
 flight_details = pd.read_sql_query('SELECT * FROM flight_details', engine.connect()).to_dict()
 
