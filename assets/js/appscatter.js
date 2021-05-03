@@ -16,13 +16,13 @@ function handleResize() {
 
 function loadChart() {
     // ===========Set Height, Width and Margins
-    var svgHeight = 550;
-    var svgWidth = 600;
+    var svgHeight = 600;
+    var svgWidth = 960;
     var margin = {
         top: 20,
         right: 40,
         bottom: 80,
-        left: 50
+        left: 100
     };
     
     // ===========Create chart area
@@ -36,7 +36,7 @@ function loadChart() {
     //============Create SVG container
     var svg = d3.select("#scatter").append("svg")
         .attr("width", svgWidth)
-        .attr("height", svgHeight);
+        .attr("height", svgHeight + 30);
 
     // ===========Append SVG group
     var chartGroup = svg.append("g")
@@ -162,7 +162,7 @@ function loadChart() {
 
     // =================================================================================
     // ===============Retrieving data & Parse data======================================
-    d3.csv("../data/arrivals.csv").then(function(aviationData, err) {
+    d3.csv("./assets/data/depart_count.csv").then(function(aviationData, err) {
         if (err) throw err;
 
         aviationData.forEach(function(data) {

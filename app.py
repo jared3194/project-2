@@ -15,17 +15,17 @@ from flask import Blueprint, render_template, Flask, jsonify
 #connect to database
 # engine = create_engine("postgres://postgres:welcome1$@localhost:5432/aviation")
 
-DATABASE_URL = f'postgresql://postgres:welcome1@localhost:5432/aviation'
+# DATABASE_URL = f'postgresql://postgres:welcome1@localhost:5432/aviation'
 #conn = create_engine(f'postgresql://postgres:{sqlkey}@localhost:5432/aviation').connect()
 
 
 #################################################
 # Database Setup
 #################################################
-engine = create_engine(DATABASE_URL)
+# engine = create_engine(DATABASE_URL)
 
 
-flight_details = pd.read_sql_query('SELECT * FROM flight_details', engine.connect()).to_dict()
+# flight_details = pd.read_sql_query('SELECT * FROM flight_details', engine.connect()).to_dict()
 
 # Create app
 
@@ -35,9 +35,9 @@ app = Flask(__name__)
 def home():
     return render_template("base.html")
 
-@app.route('/api/data')
-def api():
-    return flight_details
+# @app.route('/api/data')
+# def api():
+#     return flight_details
 
 if __name__ == '__main__':
     app.run(debug = True)
@@ -45,16 +45,4 @@ if __name__ == '__main__':
    
 # d3.json('/api/data').then(data=>{
 #     console.log(data)
-# })
-
-
-
-
-
-
-
-
-
-
-
-
+# }) 
