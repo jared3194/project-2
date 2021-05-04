@@ -18,17 +18,17 @@ The final dashboard is interactive and allows users to flip between LAX and ATL 
 # Barchart
 The barchart below shows the total number of flights that arrived in LAX/ATL from several domestic and international airports over the last week. The bar chart was created using the D3 javascript library.
 
-![image](https://user-images.githubusercontent.com/74060853/116949750-1d5e9b80-ac51-11eb-9f78-14cfd9a7af7b.png)
+![Alt Text](https://github.com/jared3194/project-2/blob/main/images/barchart.gif)
 
 # ScatterChart
 The scatter chart below shows the total number of flights and the airport's ranking (rank 1 = the airport the had the most flights arrive in ATL/LAX.) that arrived in LAX/ATL over the last 90 days from several domestic and international airports. The bar chart was created using the D3 javascript library.
 
-![image](https://user-images.githubusercontent.com/74060853/116950118-1a17df80-ac52-11eb-8dad-77baf35c1e58.png)
+![Alt Text](https://github.com/jared3194/project-2/blob/main/images/scatterchart.gif)
 
 # Leaflet
 The map chart below shows the pinpoints the specific countries/locations that had flights arrive in either LAX or ATL airports. The chart is interactive and displays a tooltip with the total number of flight, country name, and name of the arrival airport. The map chart was created using the D3 javascript library and leaflet js library.
 
-![image](https://user-images.githubusercontent.com/74060853/116950227-619e6b80-ac52-11eb-8a3f-7cf7fee6688d.png)
+![Alt Text](https://github.com/jared3194/project-2/blob/main/images/mapchart.gif)
 
 ### Heroku
 
